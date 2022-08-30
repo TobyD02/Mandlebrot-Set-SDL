@@ -2,11 +2,14 @@
 #include <cmath>
 #include <complex>
 
+
 // TODO:
 // - Add arguments to commandline
 //      - Max Iterations, Start and end values.
 // - Rename scale variable to image scale. And add new scale variable that changes the zoom.
 // - Add colour palletes
+// - Export to png instead of bmp
+// - Concurrency?
 
 // Set max iterations for mandlebrot
 const int MAX_ITER = 200;
@@ -53,9 +56,6 @@ void DrawMandlebrot(SDL_Surface* surface) {
     int n;
     Uint32* buffer = (Uint32*) surface->pixels;
 
-    int count = 0;
-    int total = WIDTH * HEIGHT;
-
     for (double row = 0; row < HEIGHT; row++) {
         for (double col = 0; col < WIDTH; col++) {
             // Get pixel position in array
@@ -67,8 +67,6 @@ void DrawMandlebrot(SDL_Surface* surface) {
 
             // Get mandlebrot iterations for that coordinate
             n = Mandlebrot(c);
-
-            if (n == MAX_ITER) count++;
 
             // Set rgb values accordingly
             if (n != MAX_ITER) {
@@ -87,8 +85,6 @@ void DrawMandlebrot(SDL_Surface* surface) {
 
     // Unlock surface
     SDL_UnlockSurface(surface);
-
-    printf("%d/%d\n", count, total);
 }
 
 // Main function
