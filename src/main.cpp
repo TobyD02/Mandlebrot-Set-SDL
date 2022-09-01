@@ -1,6 +1,7 @@
-#include <SDL.h>
 #include <cmath>
 #include <complex>
+#include <SDL2/SDL.h>
+#include <SDL_image.h>
 
 
 // TODO:
@@ -8,8 +9,12 @@
 //      - Max Iterations, Start and end values.
 // - Rename scale variable to image scale. And add new scale variable that changes the zoom.
 // - Add colour palletes
-// - Export to png instead of bmp
+// - Export to png instead of bmp [COMPLETED]
 // - Concurrency?
+//      - Iterate through width and height n at a time rather than 1
+//      - Then set a thread for each Mandlebrot call
+// - Switch from surface to renderer -> Hardware acceleration
+//      - Create on SDL_Texture* and then convert to SDL_Surface* for saving
 
 // Set max iterations for mandlebrot
 const int MAX_ITER = 200;
@@ -102,6 +107,8 @@ int main(int argc, char* argv[]) {
     // Initialise SDL
     SDL_Init(SDL_INIT_EVERYTHING);
 
+    IMG_Init(IMG_INIT_PNG);
+
     // Generate surface to draw to
     SDL_Surface* surface = SDL_CreateRGBSurface(0, WIDTH, HEIGHT, 32, 0, 0, 0, 0);
 
@@ -109,8 +116,12 @@ int main(int argc, char* argv[]) {
     DrawMandlebrot(surface);
 
     // Save as image
-    if (SDL_SaveBMP(surface, "Mandlebrot.bmp") != 0) 
-        printf("SDL_SaveBMP failed: %s\n", SDL_GetError());
+    
+    // if (SDL_SaveBMP(surface, "Mandlebrot.bmp") != 0) 
+        // printf("SDL_SaveBMP failed: %s\n", SDL_GetError());
+
+    if (IMG_SavePNG(surface, "Mandlebrot.png") != 0) 
+        printf("IMG_SavePNG failed: %s\n", IMG_GetError());
 
 
     // Free surface and quit
